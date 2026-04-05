@@ -48,12 +48,12 @@ La vue `v_missions` applique les filtres qualité suivants :
 ## Lancement
 
 ```bash
-python leila_dash/leila_dashboard.py
+python leila_dash/app.py
 ```
 
 Accès : [http://127.0.0.1:8100](http://127.0.0.1:8100)
 
-> Adapter les paramètres de connexion dans `leila_dash/leila_dashboard.py` si nécessaire (lignes `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT`, `DB_NAME`).
+> Adapter les paramètres de connexion dans `leila_dash/data.py` si nécessaire (lignes `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT`, `DB_NAME`).
 
 ---
 
@@ -62,7 +62,21 @@ Accès : [http://127.0.0.1:8100](http://127.0.0.1:8100)
 ```
 Leila_Test/
 ├── leila_dash/
-│   └── leila_dashboard.py      # Application Dash principale
+│   ├── app.py           # Point d'entrée — python app.py
+│   ├── dash_app.py      # Instance dash.Dash() partagée
+│   ├── config.py        # Couleurs, thème Plotly, constantes métier
+│   ├── data.py          # Connexion MariaDB, load_data(), DataFrame
+│   ├── components.py    # Composants HTML réutilisables (card, kpi_card)
+│   ├── layout.py        # Structure de la page (header, nav, contenu)
+│   ├── callbacks.py     # Callback de navigation entre sections
+│   └── pages/
+│       ├── overview.py       # 01 — Vue d'ensemble
+│       ├── performance.py    # 02 — Performance des trajets
+│       ├── chauffeurs.py     # 03 — Chauffeurs & Engins
+│       ├── acteurs.py        # 04 — Expéditeurs / Destinataires
+│       ├── marchandises.py   # 05 — Marchandises
+│       ├── co2.py            # 06 — Impact CO₂
+│       └── geo.py            # 07 — Géographie
 ├── create_view_v_missions.sql  # Script de création de la vue SQL
 ├── requirements.txt
 └── README.md
