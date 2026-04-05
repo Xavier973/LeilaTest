@@ -1,0 +1,46 @@
+# Environnements virtuels
+venv/
+.venv/
+env/
+
+# Dump SQL (données sensibles / fichier lourd)
+*.sql.gz
+Leila_Mise-en-conditions_dump.sql
+
+# Docs confidentielles
+leila_doc/
+Leila_Mise-en-conditions_Guidelines.pdf
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Tests & coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Données exportées
+*.csv
+*.xlsx

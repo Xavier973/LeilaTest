@@ -1,0 +1,7 @@
+# LEILA Transport Dashboard — dépendances Python
+dash>=2.16.0
+plotly>=5.20.0
+pandas>=2.0.0
+numpy>=1.24.0
+sqlalchemy>=2.0.0
+pymysql>=1.1.0
