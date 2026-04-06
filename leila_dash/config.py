@@ -44,5 +44,6 @@ NAV_ITEMS = [
     ("acteurs",      "04 — Expéditeurs / Dest."),
     ("marchandises", "05 — Marchandises"),
     ("co2",          "06 — Impact CO₂"),
-    ("geo",          "07 — Géographie"),
+    ("economie",     "07 — Impact économique"),
+    ("geo",          "08 — Géographie"),
 ]

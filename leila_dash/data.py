@@ -42,5 +42,29 @@ def load_data() -> pd.DataFrame:
     return df
 
 
+def load_carburant() -> pd.DataFrame:
+    """Charge les pleins carburant (Gasoil) par engin depuis mouvementstock."""
+    sql = text("""
+        SELECT
+            e.identifiant                       AS engin_immatriculation,
+            e.type                              AS engin_type,
+            e.marque,
+            COUNT(DISTINCT m.id)                AS nb_pleins,
+            ROUND(SUM(m.quantite), 1)           AS total_litres,
+            ROUND(AVG(m.quantite), 1)           AS moy_litres_par_plein
+        FROM mouvementstock m
+        JOIN formulaire f  ON f.id             = m.formulaireId
+        JOIN entite ent    ON ent.formulaireId = f.id
+                           AND ent.fonction    = 'EQ-5003'
+        JOIN engin e       ON e.entiteId       = ent.id
+        WHERE m.produit = 'Gasoil'
+        GROUP BY e.identifiant, e.type, e.marque
+        ORDER BY total_litres DESC
+    """)
+    with engine.connect() as conn:
+        return pd.read_sql(sql, conn)
+
+
 # Chargement unique au démarrage
 df = load_data()
+df_carburant = load_carburant()

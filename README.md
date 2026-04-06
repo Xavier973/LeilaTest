@@ -31,10 +31,10 @@ pip install -r requirements.txt
 
 ```bash
 # Importer le dump dans MariaDB
-mysql -u root snfAnonymise < Leila_Mise-en-conditions_dump.sql
+mysql -u root leila_test < Leila_Mise-en-conditions_dump.sql
 
 # Créer la vue v_missions (source unique du dashboard)
-mysql -u root snfAnonymise < create_view_v_missions.sql
+mysql -u root leila_test < create_view_v_missions.sql
 ```
 
 La vue `v_missions` applique les filtres qualité suivants :

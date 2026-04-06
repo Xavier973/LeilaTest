@@ -5,7 +5,7 @@ from dash import Input, Output
 
 from dash_app import app
 from config import NAV_ITEMS
-from data import df
+from data import df, df_carburant
 
 import pages.overview     as overview
 import pages.performance  as performance
@@ -13,6 +13,7 @@ import pages.chauffeurs   as chauffeurs
 import pages.acteurs      as acteurs
 import pages.marchandises as marchandises
 import pages.co2          as co2
+import pages.economie     as economie
 import pages.geo          as geo
 
 SECTIONS = {
@@ -22,6 +23,7 @@ SECTIONS = {
     "acteurs":      acteurs.layout,
     "marchandises": marchandises.layout,
     "co2":          co2.layout,
+    "economie":     lambda df: economie.layout(df, df_carburant),
     "geo":          geo.layout,
 }
 

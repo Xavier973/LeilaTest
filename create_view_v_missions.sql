@@ -11,7 +11,7 @@ SELECT
     e.type                                                          AS engin_type,
     e.marque                                                        AS engin_marque,
     e.modele                                                        AS engin_modele,
-    e.contenance                                                    AS engin_contenance_t,
+    CAST(e.contenance AS DECIMAL(6,2))                              AS engin_contenance_t,
     p.nom                                                           AS chauffeur_nom,
     p.prenom                                                        AS chauffeur_prenom,
     rmt.libelle                                                     AS remettant,
@@ -50,8 +50,7 @@ WHERE f.mission IN ('Transport marchandises', 'Location à la journée', 'Locati
     AND r.gpsLongitude  = l.gpsLongitude
     AND (l.kilometrageDebut - r.kilometrageDebut) > 100
   )
-GROUP BY f.id
-ORDER BY f.debut;
+GROUP BY f.id;
 
 -- Vérification rapide
 SELECT
