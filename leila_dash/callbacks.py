@@ -60,6 +60,7 @@ def update_nav_classes(active_key):
     Input("active-page", "data"),
     Input("filter-day-range", "value"),
     Input("filter-month", "value"),
+    prevent_initial_call=True,
 )
 def render_page(active_key, day_range, selected_month):
     filtered = df.copy()

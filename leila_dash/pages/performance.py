@@ -115,12 +115,12 @@ def layout(df):
         }),
         note_overnight,
         html.Div([
-            html.Div(dcc.Graph(animate=False, responsive=False, style={"height": "360px", "width": "100%"}, figure=fig_type, config={"displayModeBar": False, "responsive": False}), style={"flex": "1"}),
-            html.Div(dcc.Graph(animate=False, responsive=False, style={"height": "360px", "width": "100%"}, figure=fig_dist, config={"displayModeBar": False, "responsive": False}), style={"flex": "2"}),
+            html.Div(dcc.Graph(animate=False, responsive=True, style={"height": "360px"},figure=fig_type, config={"displayModeBar": False}), style={"flex": "1"}),
+            html.Div(dcc.Graph(animate=False, responsive=True, style={"height": "360px"},figure=fig_dist, config={"displayModeBar": False}), style={"flex": "2"}),
         ], style={"display": "flex", "gap": "16px"}),
         html.Div([
-            html.Div(dcc.Graph(animate=False, responsive=False, style={"height": "360px", "width": "100%"}, figure=fig_scatter, config={"displayModeBar": False, "responsive": False}), style={"flex": "2"}),
-            html.Div(dcc.Graph(animate=False, responsive=False, style={"height": "360px", "width": "100%"}, figure=fig_box,     config={"displayModeBar": False, "responsive": False}), style={"flex": "1"}),
+            html.Div(dcc.Graph(animate=False, responsive=True, style={"height": "360px"},figure=fig_scatter, config={"displayModeBar": False}), style={"flex": "2"}),
+            html.Div(dcc.Graph(animate=False, responsive=True, style={"height": "360px"},figure=fig_box,     config={"displayModeBar": False}), style={"flex": "1"}),
         ], style={"display": "flex", "gap": "16px"}),
     ])
 

@@ -5,7 +5,8 @@ from datetime import datetime
 from dash import html, dcc
 from dash_app import app
 from config import COLORS, NAV_ITEMS
-from data import df
+from data import df, df_form_missions, df_km_anomalies
+import pages.overview as overview
 
 _MOIS_FR = {
     1: "Janvier", 2: "Février", 3: "Mars", 4: "Avril",
@@ -30,7 +31,8 @@ _mois_options = (
 
 
 def _nav_button(key, label):
-    return html.Button(label, id=f"nav-{key}", n_clicks=0, className="top-nav-btn")
+    cls = "top-nav-btn active" if key == "overview" else "top-nav-btn"
+    return html.Button(label, id=f"nav-{key}", n_clicks=0, className=cls)
 
 
 def _last_refresh_label():
@@ -110,6 +112,10 @@ app.layout = html.Div([
             ], className="filter-card"),
         ], className="left-panel"),
 
-        html.Div(id="page-content", className="content-panel"),
+        html.Div(
+            id="page-content",
+            className="content-panel",
+            children=overview.layout(df, df_form_missions, df_km_anomalies),
+        ),
     ], className="dashboard-shell"),
 ], className="app-root")

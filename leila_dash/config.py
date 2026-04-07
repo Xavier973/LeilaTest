@@ -25,7 +25,6 @@ PLOTLY_THEME = dict(
     paper_bgcolor="rgba(0,0,0,0)",
     plot_bgcolor="rgba(0,0,0,0)",
     font=dict(family="'Segoe UI', 'Tahoma', sans-serif", color=COLORS["text"], size=12),
-    autosize=False,
     height=360,
     margin=dict(l=40, r=20, t=40, b=40),
     transition=dict(duration=0),

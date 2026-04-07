@@ -268,20 +268,20 @@ def layout(df: pd.DataFrame, df_carburant: pd.DataFrame = None):
 
         # Graphiques ligne 1
         html.Div([
-            html.Div(dcc.Graph(animate=False, responsive=False, style={"height": "360px", "width": "100%"}, figure=fig_cout_eng, config={"displayModeBar": False, "responsive": False}),
+            html.Div(dcc.Graph(animate=False, responsive=True, style={"height": "360px"},figure=fig_cout_eng, config={"displayModeBar": False}),
                      style={"flex": "1"}),
-            html.Div(dcc.Graph(animate=False, responsive=False, style={"height": "360px", "width": "100%"}, figure=fig_conso, config={"displayModeBar": False, "responsive": False}),
+            html.Div(dcc.Graph(animate=False, responsive=True, style={"height": "360px"},figure=fig_conso, config={"displayModeBar": False}),
                      style={"flex": "1"}),
         ], style={"display": "flex", "gap": "16px", "marginBottom": "16px"}),
 
         # Graphiques ligne 2
         html.Div([
-            html.Div(dcc.Graph(animate=False, responsive=False, style={"height": "360px", "width": "100%"}, figure=fig_cout_ch,      config={"displayModeBar": False, "responsive": False}),
+            html.Div(dcc.Graph(animate=False, responsive=True, style={"height": "360px"},figure=fig_cout_ch,      config={"displayModeBar": False}),
                      style={"flex": "1"}),
-            html.Div(dcc.Graph(animate=False, responsive=False, style={"height": "360px", "width": "100%"}, figure=fig_cout_mission, config={"displayModeBar": False, "responsive": False}),
+            html.Div(dcc.Graph(animate=False, responsive=True, style={"height": "360px"},figure=fig_cout_mission, config={"displayModeBar": False}),
                      style={"flex": "1"}),
         ], style={"display": "flex", "gap": "16px", "marginBottom": "16px"}),
 
         # Graphique ligne 3
-        dcc.Graph(animate=False, responsive=False, style={"height": "360px", "width": "100%"}, figure=fig_scatter, config={"displayModeBar": False, "responsive": False}),
+        dcc.Graph(animate=False, responsive=True, style={"height": "360px"},figure=fig_scatter, config={"displayModeBar": False}),
     ])

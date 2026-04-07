@@ -5,6 +5,7 @@ import dash
 app = dash.Dash(
     __name__,
     title="LEILA Transport — Dashboard",
+    eager_loading=True,
     meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}],
 )
 server = app.server  # exposé pour un éventuel déploiement WSGI
