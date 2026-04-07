@@ -1,5 +1,5 @@
 """
-LEILA Transport Dashboard
+LEILA Test Dashboard
 =========================
 Lancer : python app.py
 Accès  : http://127.0.0.1:8100

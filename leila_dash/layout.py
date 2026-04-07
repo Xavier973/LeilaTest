@@ -1,7 +1,5 @@
 # ── Layout principal ──────────────────────────────────────
 
-from datetime import datetime
-
 from dash import html, dcc
 from dash_app import app
 from config import COLORS, NAV_ITEMS
@@ -36,7 +34,9 @@ def _nav_button(key, label):
 
 
 def _last_refresh_label():
-    return datetime.now().strftime("%d/%m/%Y %H:%M")
+    import pandas as pd
+    last = df["mission_fin"].max()
+    return last.strftime("%d/%m/%Y %H:%M") if pd.notna(last) else "—"
 
 
 app.layout = html.Div([
@@ -51,14 +51,9 @@ app.layout = html.Div([
             ),
             html.Div([
                 html.Div(
-                    "Connaître - Rapports - Usine - Global",
+                    "Test - Rapports",
                     className="report-title",
                     style={"color": "#FFFFFF"},
-                ),
-                html.Div(
-                    "Vue de pilotage industriel",
-                    className="report-subtitle",
-                    style={"color": "#D8D4F1"},
                 ),
             ]),
         ], className="brand-block"),
@@ -96,13 +91,6 @@ app.layout = html.Div([
                     clearable=False,
                     searchable=False,
                 ),
-            ], className="filter-card"),
-            html.Div([
-                html.Div("Mode", className="filter-title"),
-                html.Div([
-                    html.Button("Arret", className="mode-btn"),
-                    html.Button("Degrade", className="mode-btn"),
-                ], className="mode-btn-row"),
             ], className="filter-card"),
             html.Div([
                 html.Div("Source", className="filter-title"),

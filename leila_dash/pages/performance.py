@@ -23,8 +23,23 @@ def layout(df):
         color_discrete_map=color_map,
         hole=0.45,
     )
-    fig_type.update_traces(textfont_color=COLORS["text"], textinfo="percent+label")
-    fig_type.update_layout(**PLOTLY_THEME, showlegend=False)
+    total_type = type_counts["count"].sum()
+    pull_type = [0.10 if c / total_type < 0.05 else 0 for c in type_counts["count"]]
+    fig_type.update_traces(
+        textfont_color=COLORS["text"],
+        textinfo="percent",
+        insidetextorientation="horizontal",
+        pull=pull_type,
+    )
+    fig_type.update_layout(
+        **PLOTLY_THEME,
+        showlegend=True,
+        legend=dict(
+            orientation="h", x=0.5, y=-0.08, xanchor="center",
+            font=dict(size=11), bgcolor="rgba(0,0,0,0)",
+        ),
+    )
+    fig_type.update_layout(margin=dict(l=20, r=20, t=50, b=60))
 
     # ── Distribution distances ─────────────────────────────
     fig_dist = px.histogram(

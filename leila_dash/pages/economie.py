@@ -208,12 +208,12 @@ def layout(df: pd.DataFrame, df_carburant: pd.DataFrame = None):
         yaxis=dict(title=""),
     )
 
-    # Coût moyen par mission (comparaison équitable)
+    # Coût moyen par mission
     cout_ch_mission = cout_ch.sort_values("cout_par_mission", ascending=True)
     fig_cout_mission = px.bar(
         cout_ch_mission,
         x="cout_par_mission", y="chauffeur", orientation="h",
-        title="Coût moyen par mission (€) — comparaison équitable",
+        title="Coût moyen par mission (€)",
         color="cout_par_mission",
         color_continuous_scale=[
             [0, COLORS["accent3"]], [0.5, COLORS["accent2"]], [1, COLORS["accent"]],

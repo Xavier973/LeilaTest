@@ -4,7 +4,7 @@ import dash
 
 app = dash.Dash(
     __name__,
-    title="LEILA Transport — Dashboard",
+    title="LEILA Test — Dashboard",
     eager_loading=True,
     meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}],
 )
