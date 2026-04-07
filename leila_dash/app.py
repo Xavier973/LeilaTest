@@ -18,7 +18,7 @@ if __name__ == "__main__":
     debug = os.getenv("LEILA_DEBUG", "true").strip().lower() in {"1", "true", "yes", "on"}
 
     print("=" * 55)
-    print("  LEILA Transport Dashboard")
+    print("  LEILA Test Dashboard")
     print(f"  {len(df)} missions chargées depuis MariaDB")
     print(f"  http://{host}:{port}")
     print("=" * 55)

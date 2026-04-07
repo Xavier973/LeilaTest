@@ -44,9 +44,25 @@ def layout(df, df_form_missions, df_km_anomalies):
     )
     fig_weekly.update_layout(margin=dict(l=40, r=20, t=40, b=80))
 
-    # Répartition par type de formulaire (table brute formulaire)
+    # Répartition par type de formulaire : priorité à la table brute, fallback v_missions.
+    if (
+        df_form_missions is not None
+        and not df_form_missions.empty
+        and {"mission", "count"}.issubset(set(df_form_missions.columns))
+    ):
+        pie_data = df_form_missions.copy()
+    else:
+        pie_data = (
+            df.groupby("type_mission")
+            .size()
+            .reset_index(name="count")
+            .rename(columns={"type_mission": "mission"})
+        )
+
     fig_form = px.pie(
-        df_form_missions, values="count", names="mission",
+        pie_data,
+        values="count",
+        names="mission",
         title="Répartition par type de formulaire",
         color_discrete_sequence=[COLORS["accent"], COLORS["accent2"], COLORS["accent3"]],
         hole=0.55,

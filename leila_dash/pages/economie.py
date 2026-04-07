@@ -32,8 +32,7 @@ def _kpi(label, value, unit="", color=None):
 
 
 def layout(df: pd.DataFrame, df_carburant: pd.DataFrame = None):
-    if df_carburant is None or df_carburant.empty:
-        return html.Div("Données carburant indisponibles.", style={"color": COLORS["muted"]})
+    carburant_reel_disponible = df_carburant is not None and not df_carburant.empty
 
     # ── Agrégation km missions par engin ──────────────────
     km_engin = (
@@ -43,16 +42,32 @@ def layout(df: pd.DataFrame, df_carburant: pd.DataFrame = None):
     )
 
     # ── Fusion carburant × km ──────────────────────────────
-    merged = df_carburant.merge(km_engin, on="engin_immatriculation", how="left")
-    # km estimés total = km missions × 2 (trajets à vide inclus)
-    merged["km_total_estime"] = merged["km_missions"] * 2
-    merged["cout_carburant_eur"] = merged["total_litres"] * PRIX_GASOIL_EUR
-    merged["l_pour_100km"] = (
-        merged["total_litres"] / merged["km_total_estime"].replace(0, pd.NA) * 100
-    ).round(1)
-    merged["cout_par_km_eur"] = (
-        merged["cout_carburant_eur"] / merged["km_total_estime"].replace(0, pd.NA)
-    ).round(3)
+    if carburant_reel_disponible:
+        merged = df_carburant.merge(km_engin, on="engin_immatriculation", how="left")
+        # km estimés total = km missions × 2 (trajets à vide inclus)
+        merged["km_total_estime"] = merged["km_missions"] * 2
+        merged["cout_carburant_eur"] = merged["total_litres"] * PRIX_GASOIL_EUR
+        merged["l_pour_100km"] = (
+            merged["total_litres"] / merged["km_total_estime"].replace(0, pd.NA) * 100
+        ).round(1)
+        merged["cout_par_km_eur"] = (
+            merged["cout_carburant_eur"] / merged["km_total_estime"].replace(0, pd.NA)
+        ).round(3)
+    else:
+        # Fallback : conso moyenne par type d'engin (L/100 km) pour garder des indicateurs exploitables.
+        conso_par_type = {"Porteur 8x4": 45.0, "Tracteur 6x4": 42.0, "Tracteur 4x2": 35.0}
+        engin_types = (
+            df[["engin_immatriculation", "engin_type"]]
+            .drop_duplicates(subset=["engin_immatriculation"])
+        )
+        merged = km_engin.merge(engin_types, on="engin_immatriculation", how="left")
+        merged["l_pour_100km"] = merged["engin_type"].map(conso_par_type).fillna(40.0)
+        merged["km_total_estime"] = merged["km_missions"] * 2
+        merged["total_litres"] = (merged["km_total_estime"] * merged["l_pour_100km"] / 100).round(1)
+        merged["cout_carburant_eur"] = (merged["total_litres"] * PRIX_GASOIL_EUR).round(1)
+        merged["cout_par_km_eur"] = (
+            merged["cout_carburant_eur"] / merged["km_total_estime"].replace(0, pd.NA)
+        ).round(3)
 
     # ── Coût par mission — missions journée uniquement ────────
     df_cout = df[df["type_duree"] == "journée"].copy()
@@ -213,11 +228,17 @@ def layout(df: pd.DataFrame, df_carburant: pd.DataFrame = None):
         xaxis=dict(title="€ / mission", gridcolor=COLORS["border"]),
     )
 
+    source_carburant = (
+        "litres réels (MouvementStock)"
+        if carburant_reel_disponible
+        else "estimation par type d'engin (aucun relevé carburant disponible)"
+    )
+
     # ── Note méthodologique ───────────────────────────────
     note = html.Div([
         html.Span("⚠ ESTIMATIONS — ", style={"color": COLORS["accent2"], "fontWeight": "700"}),
         html.Span(
-            f"Carburant : litres réels × {PRIX_GASOIL_EUR} €/L (prix Guyane, source prix-carburants.gouv.fr). "
+            f"Carburant : {source_carburant} × {PRIX_GASOIL_EUR} €/L (prix Guyane, source prix-carburants.gouv.fr). "
             f"Km totaux : km missions × 2 (trajets à vide estimés). "
             f"Coût horaire : {COUT_HORAIRE_EUR} €/h (barème CNR poids lourds). "
             f"Missions overnight et multi-jour exclues ({nb_exclus} missions) — durée non fiable (stationnement nocturne inclus). "

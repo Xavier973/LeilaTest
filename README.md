@@ -61,6 +61,104 @@ Accès : [http://127.0.0.1:8100](http://127.0.0.1:8100)
 
 Configuration recommandée : **Ubuntu + Nginx + Gunicorn + systemd + Let's Encrypt**.
 
+### Option Docker Compose (recommandé pour simplifier l'exploitation)
+
+Cette option exécute l'application dans un conteneur, tout en gardant **Nginx + Certbot sur l'hôte**
+pour publier `leilatest.data-service.fr`.
+
+#### 1) Installer Docker + plugin Compose
+
+```bash
+sudo apt update
+sudo apt install -y docker.io docker-compose-v2 nginx certbot python3-certbot-nginx
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
+#### 2) Préparer les variables d'environnement
+
+```bash
+cd /home/ubuntu/LeilaTest
+sudo mkdir -p /etc/leila
+sudo cp .env.example /etc/leila/leilatest.env
+sudo nano /etc/leila/leilatest.env
+```
+
+Valeurs minimales :
+
+```dotenv
+DB_USER=root
+DB_PASSWORD=
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_NAME=snfAnonymise
+LEILA_DEBUG=false
+LEILA_HOST=127.0.0.1
+LEILA_PORT=8100
+GUNICORN_WORKERS=3
+```
+
+#### 3) Lancer l'application avec Compose
+
+```bash
+cd /home/ubuntu/LeilaTest
+docker compose up -d --build
+docker compose ps
+```
+
+Le fichier `docker-compose.yml` est configuré avec :
+
+- montage volume `./leila_dash:/app/leila_dash`
+- `GUNICORN_RELOAD=true`
+
+Conséquence : les modifications Python dans `leila_dash/` sont prises en compte automatiquement
+sans reconstruire l'image.
+
+Pour appliquer un simple changement de code :
+
+```bash
+cd /home/ubuntu/LeilaTest
+sudo docker compose restart leila-dashboard
+```
+
+Reconstruire reste nécessaire si tu modifies `requirements.txt` ou `Dockerfile`.
+
+#### 4) Configurer Nginx pour le domaine
+
+```bash
+sudo cp deploy/nginx.leilatest.data-service.fr.conf /etc/nginx/sites-available/leilatest.data-service.fr
+sudo ln -sf /etc/nginx/sites-available/leilatest.data-service.fr /etc/nginx/sites-enabled/leilatest.data-service.fr
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+#### 5) Activer HTTPS
+
+```bash
+sudo certbot --nginx -d leilatest.data-service.fr
+```
+
+#### 6) Vérifier
+
+```bash
+docker compose logs --tail=100 leila-dashboard
+curl -I http://127.0.0.1:8100
+curl -I https://leilatest.data-service.fr
+```
+
+#### Commandes utiles
+
+```bash
+docker compose pull
+docker compose up -d --build
+docker compose restart leila-dashboard
+docker compose down
+```
+
+---
+
+### Option systemd (sans Docker)
+
 ### 1) DNS
 
 Créer un enregistrement **A** :

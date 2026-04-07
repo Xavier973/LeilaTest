@@ -31,7 +31,7 @@ app.layout = html.Div([
     html.Div([
         html.Div([
             html.Img(src="/assets/Logo-Leila.webp", style={"height": "32px", "verticalAlign": "middle"}),
-            html.Span(" · TRANSPORT", style={
+            html.Span(" · TEST de mise en condition", style={
                 "color": COLORS["muted"], "fontSize": "13px",
                 "fontFamily": "'Courier New', monospace", "letterSpacing": "3px",
                 "verticalAlign": "middle", "marginLeft": "8px",
