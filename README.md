@@ -53,7 +53,93 @@ python leila_dash/app.py
 
 Accès : [http://127.0.0.1:8100](http://127.0.0.1:8100)
 
-> Adapter les paramètres de connexion dans `leila_dash/data.py` si nécessaire (lignes `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT`, `DB_NAME`).
+> Les paramètres de connexion sont pilotés par variables d'environnement (voir `.env.example`).
+
+---
+
+## Mise en ligne (leilatest.data-service.fr)
+
+Configuration recommandée : **Ubuntu + Nginx + Gunicorn + systemd + Let's Encrypt**.
+
+### 1) DNS
+
+Créer un enregistrement **A** :
+
+- `leilatest.data-service.fr` → `IP_PUBLIQUE_DU_SERVEUR`
+
+### 2) Préparer le serveur
+
+```bash
+sudo apt update
+sudo apt install -y python3-venv python3-pip nginx certbot python3-certbot-nginx
+```
+
+### 3) Installer l'application
+
+```bash
+cd /home/ubuntu/LeilaTest
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+Créer le fichier d'environnement système :
+
+```bash
+sudo mkdir -p /etc/leila
+sudo cp .env.example /etc/leila/leilatest.env
+sudo nano /etc/leila/leilatest.env
+```
+
+Exemple minimal à vérifier dans `/etc/leila/leilatest.env` :
+
+```dotenv
+DB_USER=root
+DB_PASSWORD=
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_NAME=snfAnonymise
+LEILA_DEBUG=false
+LEILA_HOST=127.0.0.1
+LEILA_PORT=8100
+GUNICORN_WORKERS=3
+```
+
+### 4) Activer le service systemd
+
+```bash
+sudo cp deploy/leilatest-dashboard.service /etc/systemd/system/leilatest-dashboard.service
+sudo systemctl daemon-reload
+sudo systemctl enable --now leilatest-dashboard
+sudo systemctl status leilatest-dashboard
+```
+
+### 5) Configurer Nginx
+
+```bash
+sudo cp deploy/nginx.leilatest.data-service.fr.conf /etc/nginx/sites-available/leilatest.data-service.fr
+sudo ln -sf /etc/nginx/sites-available/leilatest.data-service.fr /etc/nginx/sites-enabled/leilatest.data-service.fr
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+### 6) Activer HTTPS (Let's Encrypt)
+
+```bash
+sudo certbot --nginx -d leilatest.data-service.fr
+```
+
+### 7) Vérifications
+
+```bash
+curl -I http://127.0.0.1:8100
+curl -I https://leilatest.data-service.fr
+```
+
+Le dashboard sera alors accessible publiquement via :
+
+- https://leilatest.data-service.fr
 
 ---
 

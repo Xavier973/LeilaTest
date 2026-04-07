@@ -1,18 +1,32 @@
 # ── Connexion MariaDB & chargement des données ────────────
 
+import os
+
 import pandas as pd
 from sqlalchemy import create_engine, text
+from sqlalchemy.engine import URL
 from config import CO2_FACTEURS
 
-DB_USER     = "root"
-DB_PASSWORD = ""
-DB_HOST     = "127.0.0.1"
-DB_PORT     = 3306
-DB_NAME     = "leila_test"
+DB_USER = os.getenv("DB_USER", "root")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "")
+DB_HOST = os.getenv("DB_HOST", "127.0.0.1")
+DB_PORT = int(os.getenv("DB_PORT", "3306"))
+DB_NAME = os.getenv("DB_NAME", "snfAnonymise")
+
+db_url = URL.create(
+    "mysql+pymysql",
+    username=DB_USER,
+    password=DB_PASSWORD or None,
+    host=DB_HOST,
+    port=DB_PORT,
+    database=DB_NAME,
+)
 
 engine = create_engine(
-    f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}",
+    db_url,
     connect_args={"charset": "utf8mb4"},
+    pool_pre_ping=True,
+    pool_recycle=280,
 )
 
 

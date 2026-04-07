@@ -1,0 +1,16 @@
+[Unit]
+Description=LEILA Test Dashboard (Dash + Gunicorn)
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/LeilaTest/leila_dash
+EnvironmentFile=/etc/leila/leilatest.env
+ExecStart=/home/ubuntu/LeilaTest/.venv/bin/gunicorn --config /home/ubuntu/LeilaTest/deploy/gunicorn.conf.py app:server
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
