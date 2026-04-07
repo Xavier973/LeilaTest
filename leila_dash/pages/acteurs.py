@@ -75,8 +75,8 @@ def layout(df):
             "letterSpacing": "3px", "marginBottom": "20px", "fontSize": "14px",
         }),
         html.Div([
-            html.Div(dcc.Graph(animate=False, responsive=True, style={"height": "360px"},figure=fig_rmt, config={"displayModeBar": False}), style={"flex": "1"}),
-            html.Div(dcc.Graph(animate=False, responsive=True, style={"height": "360px"},figure=fig_dst, config={"displayModeBar": False}), style={"flex": "1"}),
+            html.Div(dcc.Graph(id="g-act-rmt", animate=False, responsive=True, style={"height": "360px", "width": "100%"}, figure=fig_rmt, config={"displayModeBar": False}), style={"flex": "1"}),
+            html.Div(dcc.Graph(id="g-act-dst", animate=False, responsive=True, style={"height": "360px", "width": "100%"}, figure=fig_dst, config={"displayModeBar": False}), style={"flex": "1"}),
         ], style={"display": "flex", "gap": "16px"}),
-        dcc.Graph(animate=False, responsive=True, style={"height": "360px"},figure=fig_att, config={"displayModeBar": False}),
+        dcc.Graph(id="g-act-att", animate=False, responsive=True, style={"height": "360px", "width": "100%"}, figure=fig_att, config={"displayModeBar": False}),
     ])

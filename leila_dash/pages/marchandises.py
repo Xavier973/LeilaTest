@@ -60,7 +60,7 @@ def layout(df):
             "letterSpacing": "3px", "marginBottom": "20px", "fontSize": "14px",
         }),
         html.Div([
-            html.Div(dcc.Graph(animate=False, responsive=True, style={"height": "360px"},figure=fig_mch,   config={"displayModeBar": False}), style={"flex": "1"}),
-            html.Div(dcc.Graph(animate=False, responsive=True, style={"height": "360px"},figure=fig_trend, config={"displayModeBar": False}), style={"flex": "1"}),
+            html.Div(dcc.Graph(id="g-mch-mch",   animate=False, responsive=True, style={"height": "360px", "width": "100%"}, figure=fig_mch,   config={"displayModeBar": False}), style={"flex": "1"}),
+            html.Div(dcc.Graph(id="g-mch-trend", animate=False, responsive=True, style={"height": "360px", "width": "100%"}, figure=fig_trend, config={"displayModeBar": False}), style={"flex": "1"}),
         ], style={"display": "flex", "gap": "16px"}),
     ])

@@ -84,8 +84,8 @@ def layout(df):
         }),
         note,
         html.Div([
-            html.Div(dcc.Graph(animate=False, responsive=True, style={"height": "360px"},figure=fig_co2_eng, config={"displayModeBar": False}), style={"flex": "1"}),
-            html.Div(dcc.Graph(animate=False, responsive=True, style={"height": "360px"},figure=fig_co2_ch,  config={"displayModeBar": False}), style={"flex": "1"}),
+            html.Div(dcc.Graph(id="g-co2-eng",   animate=False, responsive=True, style={"height": "360px", "width": "100%"}, figure=fig_co2_eng,  config={"displayModeBar": False}), style={"flex": "1"}),
+            html.Div(dcc.Graph(id="g-co2-ch",    animate=False, responsive=True, style={"height": "360px", "width": "100%"}, figure=fig_co2_ch,   config={"displayModeBar": False}), style={"flex": "1"}),
         ], style={"display": "flex", "gap": "16px"}),
-        dcc.Graph(animate=False, responsive=True, style={"height": "360px"},figure=fig_co2_trend, config={"displayModeBar": False}),
+        dcc.Graph(id="g-co2-trend", animate=False, responsive=True, style={"height": "360px", "width": "100%"}, figure=fig_co2_trend, config={"displayModeBar": False}),
     ])
