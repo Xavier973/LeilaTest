@@ -30,16 +30,13 @@ app.layout = html.Div([
     # ── En-tête ──────────────────────────────────────────
     html.Div([
         html.Div([
-            html.Span("LEILA", style={
-                "color": COLORS["accent"], "fontSize": "22px",
-                "fontWeight": "900", "fontFamily": "'Courier New', monospace",
-                "letterSpacing": "4px",
-            }),
+            html.Img(src="/assets/Logo-Leila.webp", style={"height": "32px", "verticalAlign": "middle"}),
             html.Span(" · TRANSPORT", style={
                 "color": COLORS["muted"], "fontSize": "13px",
                 "fontFamily": "'Courier New', monospace", "letterSpacing": "3px",
+                "verticalAlign": "middle", "marginLeft": "8px",
             }),
-        ]),
+        ], style={"display": "flex", "alignItems": "center"}),
         html.Div("Plateau des Guyanes · Jan–Mars 2026", style={
             "color": COLORS["muted"], "fontSize": "11px",
             "fontFamily": "'Courier New', monospace",

@@ -15,7 +15,10 @@ def layout(df):
         km_total=("distance_km", "sum"),
         km_moyen=("distance_km", "mean"),
         duree_moy=("duree_trajet_min", "median"),
-    ).reset_index().sort_values("missions", ascending=True)
+        nb_overnight=("type_duree", lambda x: (x != "journée").sum()),
+    ).reset_index()
+    ch["pct_overnight"] = (ch["nb_overnight"] / ch["missions"] * 100).round(1)
+    ch = ch.sort_values("missions", ascending=True)
 
     fig_ch = make_subplots(rows=1, cols=2,
                            subplot_titles=["Missions par chauffeur", "Km total par chauffeur"])
@@ -71,14 +74,36 @@ def layout(df):
     )
     fig_heatmap.update_layout(**PLOTLY_THEME)
 
+    # % overnight par chauffeur
+    fig_overnight = px.bar(
+        ch.sort_values("pct_overnight", ascending=True),
+        x="pct_overnight", y="chauffeur", orientation="h",
+        title="% missions overnight ou multi-jour par chauffeur",
+        color="pct_overnight",
+        color_continuous_scale=[
+            [0, COLORS["accent3"]], [0.5, COLORS["accent2"]], [1, COLORS["accent"]],
+        ],
+        labels={"pct_overnight": "% overnight", "chauffeur": ""},
+        text=ch.sort_values("pct_overnight", ascending=True)["pct_overnight"].apply(lambda x: f"{x}%"),
+    )
+    fig_overnight.update_traces(textposition="outside", textfont_color=COLORS["text"])
+    fig_overnight.update_layout(
+        **PLOTLY_THEME, coloraxis_showscale=False,
+        xaxis=dict(gridcolor=COLORS["border"], title="%"),
+    )
+
     return html.Div([
         html.H2("CHAUFFEURS & ENGINS", style={
             "color": COLORS["accent"], "fontFamily": "'Courier New', monospace",
             "letterSpacing": "3px", "marginBottom": "20px", "fontSize": "14px",
         }),
         html.Div([
-            html.Div(dcc.Graph(figure=fig_ch,  config={"displayModeBar": False}), style={"flex": "2"}),
-            html.Div(dcc.Graph(figure=fig_eng, config={"displayModeBar": False}), style={"flex": "1"}),
+            html.Div(dcc.Graph(figure=fig_ch,       config={"displayModeBar": False}), style={"flex": "2"}),
+            html.Div(dcc.Graph(figure=fig_overnight, config={"displayModeBar": False}), style={"flex": "1"}),
+        ], style={"display": "flex", "gap": "16px"}),
+        html.Div([
+            html.Div(dcc.Graph(figure=fig_eng,     config={"displayModeBar": False}), style={"flex": "1"}),
+            html.Div(dcc.Graph(figure=fig_heatmap, config={"displayModeBar": False}), style={"flex": "2"}),
         ], style={"display": "flex", "gap": "16px"}),
         dcc.Graph(figure=fig_heatmap, config={"displayModeBar": False}),
     ])

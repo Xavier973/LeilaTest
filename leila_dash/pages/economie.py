@@ -54,8 +54,9 @@ def layout(df: pd.DataFrame, df_carburant: pd.DataFrame = None):
         merged["cout_carburant_eur"] / merged["km_total_estime"].replace(0, pd.NA)
     ).round(3)
 
-    # ── Coût par mission (v_missions enrichi) ─────────────
-    df_cout = df.copy()
+    # ── Coût par mission — missions journée uniquement ────────
+    df_cout = df[df["type_duree"] == "journée"].copy()
+    nb_exclus = len(df) - len(df_cout)
     df_cout["cout_carburant_estime"] = df_cout.apply(
         lambda r: (
             r["distance_km"]
@@ -159,7 +160,7 @@ def layout(df: pd.DataFrame, df_carburant: pd.DataFrame = None):
         yaxis=dict(gridcolor=COLORS["border"]),
     )
 
-    # ── Fig 4 : Coût total estimé par chauffeur ───────────
+    # ── Fig 4 : Coût total + coût/mission par chauffeur ──────
     cout_ch = (
         df_cout.groupby("chauffeur")
         .agg(
@@ -169,25 +170,47 @@ def layout(df: pd.DataFrame, df_carburant: pd.DataFrame = None):
             nb_missions=("mission_id", "count"),
         )
         .reset_index()
-        .sort_values("cout_total", ascending=True)
     )
+    cout_ch["cout_par_mission"] = (cout_ch["cout_total"] / cout_ch["nb_missions"]).round(0)
+    cout_ch_sorted = cout_ch.sort_values("cout_total", ascending=True)
+
     fig_cout_ch = go.Figure()
     fig_cout_ch.add_trace(go.Bar(
-        y=cout_ch["chauffeur"], x=cout_ch["cout_carb"],
+        y=cout_ch_sorted["chauffeur"], x=cout_ch_sorted["cout_carb"],
         name="Carburant", orientation="h",
         marker_color=COLORS["accent2"],
     ))
     fig_cout_ch.add_trace(go.Bar(
-        y=cout_ch["chauffeur"], x=cout_ch["cout_heure"],
+        y=cout_ch_sorted["chauffeur"], x=cout_ch_sorted["cout_heure"],
         name="Horaire (CNR)", orientation="h",
         marker_color=COLORS["accent3"],
     ))
     fig_cout_ch.update_layout(
         **PLOTLY_THEME,
-        title="Coût estimé par chauffeur (€) — carburant + horaire",
+        title="Coût total estimé par chauffeur (€) — carburant + horaire",
         barmode="stack",
         xaxis=dict(title="€", gridcolor=COLORS["border"]),
         yaxis=dict(title=""),
+    )
+
+    # Coût moyen par mission (comparaison équitable)
+    cout_ch_mission = cout_ch.sort_values("cout_par_mission", ascending=True)
+    fig_cout_mission = px.bar(
+        cout_ch_mission,
+        x="cout_par_mission", y="chauffeur", orientation="h",
+        title="Coût moyen par mission (€) — comparaison équitable",
+        color="cout_par_mission",
+        color_continuous_scale=[
+            [0, COLORS["accent3"]], [0.5, COLORS["accent2"]], [1, COLORS["accent"]],
+        ],
+        text=cout_ch_mission["cout_par_mission"].apply(lambda x: f"{x:.0f} €"),
+        labels={"cout_par_mission": "€/mission", "chauffeur": ""},
+        hover_data={"nb_missions": True, "cout_total": True},
+    )
+    fig_cout_mission.update_traces(textposition="outside", textfont_color=COLORS["text"])
+    fig_cout_mission.update_layout(
+        **PLOTLY_THEME, coloraxis_showscale=False,
+        xaxis=dict(title="€ / mission", gridcolor=COLORS["border"]),
     )
 
     # ── Note méthodologique ───────────────────────────────
@@ -197,6 +220,7 @@ def layout(df: pd.DataFrame, df_carburant: pd.DataFrame = None):
             f"Carburant : litres réels × {PRIX_GASOIL_EUR} €/L (prix Guyane, source prix-carburants.gouv.fr). "
             f"Km totaux : km missions × 2 (trajets à vide estimés). "
             f"Coût horaire : {COUT_HORAIRE_EUR} €/h (barème CNR poids lourds). "
+            f"Missions overnight et multi-jour exclues ({nb_exclus} missions) — durée non fiable (stationnement nocturne inclus). "
             "Les coûts de maintenance, pneumatiques et assurances ne sont pas inclus.",
             style={"color": COLORS["muted"], "fontSize": "11px",
                    "fontFamily": "'Courier New', monospace"},
@@ -231,9 +255,12 @@ def layout(df: pd.DataFrame, df_carburant: pd.DataFrame = None):
 
         # Graphiques ligne 2
         html.Div([
-            html.Div(dcc.Graph(figure=fig_cout_ch, config={"displayModeBar": False}),
+            html.Div(dcc.Graph(figure=fig_cout_ch,      config={"displayModeBar": False}),
                      style={"flex": "1"}),
-            html.Div(dcc.Graph(figure=fig_scatter, config={"displayModeBar": False}),
-                     style={"flex": "1.5"}),
-        ], style={"display": "flex", "gap": "16px"}),
+            html.Div(dcc.Graph(figure=fig_cout_mission, config={"displayModeBar": False}),
+                     style={"flex": "1"}),
+        ], style={"display": "flex", "gap": "16px", "marginBottom": "16px"}),
+
+        # Graphique ligne 3
+        dcc.Graph(figure=fig_scatter, config={"displayModeBar": False}),
     ])

@@ -25,6 +25,16 @@ SELECT
     TIMESTAMPDIFF(MINUTE, r.dateFin,   l.dateDebut)                 AS duree_trajet_min,
     TIMESTAMPDIFF(MINUTE, l.dateDebut, l.dateFin)                   AS attente_dechargement_min,
     TIMESTAMPDIFF(MINUTE, r.dateDebut, l.dateFin)                   AS duree_totale_min,
+    -- Durée "active" : somme des étapes saisies (exclut le stationnement nocturne)
+    (  TIMESTAMPDIFF(MINUTE, r.dateDebut, r.dateFin)
+     + TIMESTAMPDIFF(MINUTE, r.dateFin,   l.dateDebut)
+     + TIMESTAMPDIFF(MINUTE, l.dateDebut, l.dateFin) )              AS duree_active_min,
+    -- Flag mission overnight
+    CASE
+        WHEN DATEDIFF(l.dateFin, r.dateDebut) = 0 THEN 'journée'
+        WHEN DATEDIFF(l.dateFin, r.dateDebut) = 1 THEN 'overnight'
+        ELSE 'multi-jour'
+    END                                                             AS type_duree,
     r.gpsLatitude                                                   AS lat_retrait,
     r.gpsLongitude                                                  AS lon_retrait,
     l.gpsLatitude                                                   AS lat_livraison,
@@ -48,11 +58,11 @@ WHERE f.mission IN ('Transport marchandises', 'Location à la journée', 'Locati
     AND l.gpsLatitude   IS NOT NULL
     AND r.gpsLatitude   = l.gpsLatitude
     AND r.gpsLongitude  = l.gpsLongitude
-    AND (l.kilometrageDebut - r.kilometrageDebut) > 100
+    AND (l.kilometrageDebut - r.kilometrageDebut) > 200
   )
 GROUP BY f.id;
 
--- Vérification rapide
+-- Vérification
 SELECT
     COUNT(*)                    AS total_missions,
     COUNT(DISTINCT engin_immatriculation) AS nb_engins,

@@ -9,6 +9,8 @@ COLORS = {
     "accent3":   "#4ECDC4",
     "text":      "#E8E8F0",
     "muted":     "#7B7D8E",
+    "danger":    "#E84545",
+    "success":   "#4ECDC4",
     "engins": {
         "TR-789-XY": "#E84545",
         "HB-316-CS": "#F5A623",
