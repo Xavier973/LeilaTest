@@ -94,6 +94,6 @@ def layout(df):
             "color": COLORS["accent"], "fontFamily": "'Courier New', monospace",
             "letterSpacing": "3px", "marginBottom": "20px", "fontSize": "14px",
         }),
-        dcc.Graph(figure=fig_map,     config={"displayModeBar": True, "scrollZoom": True}),
-        dcc.Graph(figure=fig_density, config={"displayModeBar": True, "scrollZoom": True}),
+        dcc.Graph(animate=False, responsive=False, style={"height": "360px", "width": "100%"}, figure=fig_map,     config={"displayModeBar": True, "scrollZoom": True, "responsive": False}),
+        dcc.Graph(animate=False, responsive=False, style={"height": "360px", "width": "100%"}, figure=fig_density, config={"displayModeBar": True, "scrollZoom": True, "responsive": False}),
     ])

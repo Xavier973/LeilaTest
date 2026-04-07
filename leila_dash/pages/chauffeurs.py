@@ -98,12 +98,12 @@ def layout(df):
             "letterSpacing": "3px", "marginBottom": "20px", "fontSize": "14px",
         }),
         html.Div([
-            html.Div(dcc.Graph(figure=fig_ch,       config={"displayModeBar": False}), style={"flex": "2"}),
-            html.Div(dcc.Graph(figure=fig_overnight, config={"displayModeBar": False}), style={"flex": "1"}),
+            html.Div(dcc.Graph(animate=False, responsive=False, style={"height": "360px", "width": "100%"}, figure=fig_ch,       config={"displayModeBar": False, "responsive": False}), style={"flex": "2"}),
+            html.Div(dcc.Graph(animate=False, responsive=False, style={"height": "360px", "width": "100%"}, figure=fig_overnight, config={"displayModeBar": False, "responsive": False}), style={"flex": "1"}),
         ], style={"display": "flex", "gap": "16px"}),
         html.Div([
-            html.Div(dcc.Graph(figure=fig_eng,     config={"displayModeBar": False}), style={"flex": "1"}),
-            html.Div(dcc.Graph(figure=fig_heatmap, config={"displayModeBar": False}), style={"flex": "2"}),
+            html.Div(dcc.Graph(animate=False, responsive=False, style={"height": "360px", "width": "100%"}, figure=fig_eng,     config={"displayModeBar": False, "responsive": False}), style={"flex": "1"}),
+            html.Div(dcc.Graph(animate=False, responsive=False, style={"height": "360px", "width": "100%"}, figure=fig_heatmap, config={"displayModeBar": False, "responsive": False}), style={"flex": "2"}),
         ], style={"display": "flex", "gap": "16px"}),
-        dcc.Graph(figure=fig_heatmap, config={"displayModeBar": False}),
+        dcc.Graph(animate=False, responsive=False, style={"height": "360px", "width": "100%"}, figure=fig_heatmap, config={"displayModeBar": False, "responsive": False}),
     ])

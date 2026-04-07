@@ -8,9 +8,10 @@ def card(children, style=None):
     s = {
         "background":    COLORS["card"],
         "border":        f"1px solid {COLORS['border']}",
-        "borderRadius":  "8px",
-        "padding":       "20px",
+        "borderRadius":  "12px",
+        "padding":       "18px",
         "marginBottom":  "16px",
+        "boxShadow":     "0 10px 24px rgba(22, 34, 51, 0.06)",
     }
     if style:
         s.update(style)
@@ -23,12 +24,12 @@ def kpi_card(label, value, sub="", color=None):
     return html.Div([
         html.Div(label, style={
             "color": COLORS["muted"], "fontSize": "11px",
-            "fontFamily": "'Courier New', monospace",
-            "letterSpacing": "2px", "textTransform": "uppercase",
+            "fontWeight": "600",
+            "letterSpacing": "0.5px", "textTransform": "uppercase",
         }),
         html.Div(value, style={
             "color": color, "fontSize": "32px",
-            "fontWeight": "700", "fontFamily": "'Courier New', monospace",
+            "fontWeight": "700",
             "lineHeight": "1.1", "marginTop": "6px",
         }),
         html.Div(sub, style={
@@ -36,10 +37,11 @@ def kpi_card(label, value, sub="", color=None):
         }),
     ], style={
         "background":   COLORS["card"],
-        "border":       f"1px solid {color}33",
-        "borderLeft":   f"3px solid {color}",
-        "borderRadius": "6px",
-        "padding":      "16px 20px",
+        "border":       f"1px solid {COLORS['border']}",
+        "borderTop":    f"4px solid {color}",
+        "borderRadius": "12px",
+        "padding":      "16px 18px",
+        "boxShadow":    "0 8px 20px rgba(22, 34, 51, 0.05)",
         "flex":         "1",
         "minWidth":     "140px",
     })

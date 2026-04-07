@@ -13,6 +13,8 @@ services:
       LEILA_HOST: "127.0.0.1"
       LEILA_PORT: "8100"
       GUNICORN_BIND: "127.0.0.1:8100"
-      GUNICORN_RELOAD: "true"
+      GUNICORN_RELOAD: "false"
+      GUNICORN_WORKERS: "2"
+      GUNICORN_THREADS: "1"
     volumes:
       - ./leila_dash:/app/leila_dash

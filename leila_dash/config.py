@@ -1,16 +1,16 @@
 # ── Palette, thème Plotly & constantes métier ─────────────
 
 COLORS = {
-    "bg":        "#0F1117",
-    "card":      "#1A1D27",
-    "border":    "#2A2D3E",
-    "accent":    "#E84545",
-    "accent2":   "#F5A623",
-    "accent3":   "#4ECDC4",
-    "text":      "#E8E8F0",
-    "muted":     "#7B7D8E",
-    "danger":    "#E84545",
-    "success":   "#4ECDC4",
+    "bg":        "#F2F5F8",
+    "card":      "#FFFFFF",
+    "border":    "#D4DEE9",
+    "accent":    "#B14B34",
+    "accent2":   "#2E7FA1",
+    "accent3":   "#6F9A3A",
+    "text":      "#1F2937",
+    "muted":     "#66758A",
+    "danger":    "#B8403A",
+    "success":   "#2F8D4E",
     "engins": {
         "TR-789-XY": "#E84545",
         "HB-316-CS": "#F5A623",
@@ -24,8 +24,11 @@ COLORS = {
 PLOTLY_THEME = dict(
     paper_bgcolor="rgba(0,0,0,0)",
     plot_bgcolor="rgba(0,0,0,0)",
-    font=dict(family="'Courier New', monospace", color=COLORS["text"], size=12),
+    font=dict(family="'Segoe UI', 'Tahoma', sans-serif", color=COLORS["text"], size=12),
+    autosize=False,
+    height=360,
     margin=dict(l=40, r=20, t=40, b=40),
+    transition=dict(duration=0),
     colorway=[
         COLORS["accent"], COLORS["accent2"], COLORS["accent3"],
         "#A78BFA", "#34D399", "#F472B6",

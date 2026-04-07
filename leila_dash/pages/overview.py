@@ -143,8 +143,8 @@ def layout(df, df_form_missions, df_km_anomalies):
             kpi_card("Alertes km",             alert_label,             "anomalies brutes", alert_color),
         ], style={"display": "flex", "gap": "12px", "flexWrap": "wrap", "marginBottom": "20px"}),
         html.Div([
-            html.Div(dcc.Graph(figure=fig_weekly, config={"displayModeBar": False}), style={"flex": "2"}),
-            html.Div(dcc.Graph(figure=fig_form,   config={"displayModeBar": False}), style={"flex": "1"}),
+            html.Div(dcc.Graph(animate=False, responsive=False, style={"height": "360px", "width": "100%"}, figure=fig_weekly, config={"displayModeBar": False, "responsive": False}), style={"flex": "2"}),
+            html.Div(dcc.Graph(animate=False, responsive=False, style={"height": "360px", "width": "100%"}, figure=fig_form,   config={"displayModeBar": False, "responsive": False}), style={"flex": "1"}),
         ], style={"display": "flex", "gap": "16px"}),
         anomaly_section,
     ])
