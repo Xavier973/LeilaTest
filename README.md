@@ -2,7 +2,7 @@
 
 Dashboard analytique Dash/Plotly pour le test technique **Data/BI Analyst — MÉTHODES CODE** (éditeur du SaaS LEILA).
 
-**Période analysée :** Janvier – Mars 2026 (11 semaines) · **734 missions validées**
+**Période analysée :** Janvier – Mars 2026 (11 semaines)
 
 ---
 
@@ -260,7 +260,8 @@ Leila_Test/
 │       ├── acteurs.py        # 04 — Expéditeurs / Destinataires
 │       ├── marchandises.py   # 05 — Marchandises
 │       ├── co2.py            # 06 — Impact CO₂
-│       └── geo.py            # 07 — Géographie
+│       ├── geo.py            # 07 — Géographie
+│       └── economie.py       # 08 — Impact économique
 ├── create_view_v_missions.sql  # Script de création de la vue SQL
 ├── requirements.txt
 └── README.md
@@ -279,6 +280,7 @@ Leila_Test/
 | 5 | **Marchandises** | Top libellés, évolution mensuelle des volumes |
 | 6 | **Impact CO₂** | Estimation par engin et chauffeur (facteurs ADEME) |
 | 7 | **Géographie** | Carte GPS trajets, densité des zones retrait/livraison |
+| 8 | **Impact économique** | Coût carburant, coût horaire, coût total par engin et chauffeur (barème CNR) |
 
 ---
 
