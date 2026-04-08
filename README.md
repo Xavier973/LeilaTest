@@ -31,10 +31,10 @@ pip install -r requirements.txt
 
 ```bash
 # Importer le dump dans MariaDB
-mysql -u root leila_test < Leila_Mise-en-conditions_dump.sql
+mysql -u root snfAnonymise < Leila_Mise-en-conditions_dump.sql
 
 # Créer la vue v_missions (source unique du dashboard)
-mysql -u root leila_test < create_view_v_missions.sql
+mysql -u root snfAnonymise < create_view_v_missions.sql
 ```
 
 La vue `v_missions` applique les filtres qualité suivants :
@@ -120,62 +120,6 @@ curl -I http://127.0.0.1:8100
 curl -I https://leilatest.data-service.fr
 ```
 
-#### Commandes utiles
-
-```bash
-docker compose pull
-docker compose up -d --build
-docker compose restart leila-dashboard
-docker compose down
-```
-
----
-
-### Option systemd (sans Docker)
-
-### 1) DNS
-
-Créer un enregistrement **A** :
-
-- `leilatest.data-service.fr` → `IP_PUBLIQUE_DU_SERVEUR`
-
-### 2) Préparer le serveur
-
-```bash
-sudo apt update
-sudo apt install -y python3-venv python3-pip nginx certbot python3-certbot-nginx
-```
-
-### 3) Installer l'application
-
-```bash
-cd /home/ubuntu/LeilaTest
-python3 -m venv .venv
-source .venv/bin/activate
-pip install --upgrade pip
-pip install -r requirements.txt
-```
-
-Créer le fichier d'environnement système :
-
-```bash
-sudo mkdir -p /etc/leila
-sudo cp .env.example /etc/leila/leilatest.env
-sudo nano /etc/leila/leilatest.env
-```
-
-```dotenv
-DB_USER=root
-DB_PASSWORD=
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_NAME=snfAnonymise
-LEILA_DEBUG=false
-LEILA_HOST=127.0.0.1
-LEILA_PORT=8100
-GUNICORN_WORKERS=3
-```
-
 ---
 
 ## Structure du projet
@@ -225,7 +169,6 @@ Leila_Test/
 
 | Indicateur | Valeur |
 |---|---|
-| Missions validées | 734 |
 | Engins actifs | 6 |
 | Chauffeurs | 7 |
 | Distance médiane | 27 km |
@@ -245,13 +188,5 @@ Leila_Test/
 | Tracteur 6x4 | 0,750 kg CO₂/km |
 | Tracteur 4x2 | 0,650 kg CO₂/km |
 
-Aucune donnée carburant disponible dans le dump — estimation par type de véhicule uniquement.
-
 ---
 
-## Anomalies connues
-
-- **OVAL JOHAN = AUVAL JOHAN** : doublon de saisie, fusionné dans le code
-- **Table `Location` vide** : le formulaire TRP2 (location à la journée) n'est pas exploitable
-- **20% de nulls sur les poids** : missions sans pesée — traités avec `COALESCE(..., 0)`
-- **1–2% de nulls GPS** : filtrés avant affichage cartographique
