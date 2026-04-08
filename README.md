@@ -66,16 +66,7 @@ Configuration recommandée : **Ubuntu + Nginx + Gunicorn + systemd + Let's Encry
 Cette option exécute l'application dans un conteneur, tout en gardant **Nginx + Certbot sur l'hôte**
 pour publier `leilatest.data-service.fr`.
 
-#### 1) Installer Docker + plugin Compose
-
-```bash
-sudo apt update
-sudo apt install -y docker.io docker-compose-v2 nginx certbot python3-certbot-nginx
-sudo usermod -aG docker $USER
-newgrp docker
-```
-
-#### 2) Préparer les variables d'environnement
+#### 1) Préparer les variables d'environnement
 
 ```bash
 cd /home/ubuntu/LeilaTest
@@ -105,23 +96,6 @@ cd /home/ubuntu/LeilaTest
 docker compose up -d --build
 docker compose ps
 ```
-
-Le fichier `docker-compose.yml` est configuré avec :
-
-- montage volume `./leila_dash:/app/leila_dash`
-- `GUNICORN_RELOAD=true`
-
-Conséquence : les modifications Python dans `leila_dash/` sont prises en compte automatiquement
-sans reconstruire l'image.
-
-Pour appliquer un simple changement de code :
-
-```bash
-cd /home/ubuntu/LeilaTest
-sudo docker compose restart leila-dashboard
-```
-
-Reconstruire reste nécessaire si tu modifies `requirements.txt` ou `Dockerfile`.
 
 #### 4) Configurer Nginx pour le domaine
 
@@ -190,8 +164,6 @@ sudo cp .env.example /etc/leila/leilatest.env
 sudo nano /etc/leila/leilatest.env
 ```
 
-Exemple minimal à vérifier dans `/etc/leila/leilatest.env` :
-
 ```dotenv
 DB_USER=root
 DB_PASSWORD=
@@ -203,41 +175,6 @@ LEILA_HOST=127.0.0.1
 LEILA_PORT=8100
 GUNICORN_WORKERS=3
 ```
-
-### 4) Activer le service systemd
-
-```bash
-sudo cp deploy/leilatest-dashboard.service /etc/systemd/system/leilatest-dashboard.service
-sudo systemctl daemon-reload
-sudo systemctl enable --now leilatest-dashboard
-sudo systemctl status leilatest-dashboard
-```
-
-### 5) Configurer Nginx
-
-```bash
-sudo cp deploy/nginx.leilatest.data-service.fr.conf /etc/nginx/sites-available/leilatest.data-service.fr
-sudo ln -sf /etc/nginx/sites-available/leilatest.data-service.fr /etc/nginx/sites-enabled/leilatest.data-service.fr
-sudo nginx -t
-sudo systemctl reload nginx
-```
-
-### 6) Activer HTTPS (Let's Encrypt)
-
-```bash
-sudo certbot --nginx -d leilatest.data-service.fr
-```
-
-### 7) Vérifications
-
-```bash
-curl -I http://127.0.0.1:8100
-curl -I https://leilatest.data-service.fr
-```
-
-Le dashboard sera alors accessible publiquement via :
-
-- https://leilatest.data-service.fr
 
 ---
 
