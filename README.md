@@ -122,6 +122,39 @@ curl -I https://leilatest.data-service.fr
 
 ---
 
+## Architecture des données
+
+### Pipeline de chargement
+
+Le dashboard repose sur **4 requêtes SQL** exécutées au démarrage ([data.py](leila_dash/data.py)) :
+
+| # | Fonction | Tables sources | Utilisée par |
+|---|----------|---------------|--------------|
+| 1 | `SELECT * FROM v_missions` | Vue unifiée (7 tables) | **Toutes les pages** |
+| 2 | `load_carburant()` — agrégation Gasoil | MouvementStock, Formulaire, Entite, Engin | Impact économique |
+| 3 | `load_formulaire_missions()` — COUNT par type | Formulaire (brut) | Vue d'ensemble (camembert) |
+| 4 | `load_km_anomalies()` — records non filtrés | Formulaire, Entite, Engin, Retrait, Livraison, Personne | Vue d'ensemble (table anomalies) |
+
+> Les requêtes #3 et #4 interrogent les tables brutes (hors `v_missions`) pour capturer des données que la vue exclut intentionnellement.
+
+### Composants par page
+
+| Page | Composant | Source |
+|------|-----------|--------|
+| **Vue d'ensemble** | KPIs, activité hebdomadaire | `df` ← `v_missions` |
+| | Camembert types de missions | `df_form_missions` ← requête #3 |
+| | Table anomalies km | `df_km_anomalies` ← requête #4 |
+| **Performance trajets** | Histogramme distances, scatter, boxplots attentes | `df` ← `v_missions` |
+| **Chauffeurs & Engins** | Missions/km par chauffeur, heatmap, % nuitées | `df` ← `v_missions` |
+| **Expéditeurs / Destinataires** | Top remettants, destinataires, temps d'attente | `df` ← `v_missions` |
+| **Marchandises** | Top 15, évolution mensuelle | `df` ← `v_missions` (colonne GROUP_CONCAT éclatée en Python) |
+| **Impact CO₂** | CO₂ par véhicule, chauffeur, tendance | `df` ← `v_missions` + facteurs ADEME ([config.py](leila_dash/config.py)) |
+| **Géographie** | Carte GPS (points + routes) | `df` ← `v_missions` (filtré GPS valides Guyane) |
+| **Impact économique** | Coût carburant réel, consommation L/100km | `df_carburant` ← requête #2 |
+| | Coût horaire, coût par chauffeur/mission | `df` ← `v_missions` + estimations Python |
+
+---
+
 ## Structure du projet
 
 ```

@@ -135,18 +135,9 @@ def layout(df: pd.DataFrame, df_carburant: pd.DataFrame = None):
             text=[f"{row['l_pour_100km']} L" if pd.notna(row["l_pour_100km"]) else "N/A"],
             textposition="outside",
         ))
-    # Ligne benchmark par type
-    for _, row in merged.iterrows():
-        if pd.notna(row.get("benchmark_l100")):
-            fig_conso.add_shape(
-                type="line",
-                x0=row["engin_immatriculation"], x1=row["engin_immatriculation"],
-                y0=0, y1=row["benchmark_l100"],
-                line=dict(color=COLORS["accent"], dash="dot", width=2),
-            )
     fig_conso.update_layout(
         **PLOTLY_THEME,
-        title="Consommation L/100km estimée (trajets à vide inclus) — ligne pointillée = benchmark type",
+        title="Consommation L/100km estimée (trajets à vide inclus)",
         showlegend=False,
         xaxis=dict(title="Engin", gridcolor=COLORS["border"]),
         yaxis=dict(title="L/100km", gridcolor=COLORS["border"]),
