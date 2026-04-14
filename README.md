@@ -61,7 +61,7 @@ Accès : [http://127.0.0.1:8100](http://127.0.0.1:8100)
 
 Configuration recommandée : **Ubuntu + Nginx + Gunicorn + systemd + Let's Encrypt**.
 
-### Option Docker Compose (recommandé pour simplifier l'exploitation)
+### Docker Compose
 
 Cette option exécute l'application dans un conteneur, tout en gardant **Nginx + Certbot sur l'hôte**
 pour publier `leilatest.data-service.fr`.

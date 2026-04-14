@@ -41,6 +41,7 @@ htmlcov/
 Thumbs.db
 desktop.ini
 
-# Données exportées
+# Données exportées et fichiers de test
 *.csv
 *.xlsx
+Test*.sql

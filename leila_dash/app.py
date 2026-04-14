@@ -15,7 +15,7 @@ from data import df
 if __name__ == "__main__":
     host = os.getenv("LEILA_HOST", "127.0.0.1")
     port = int(os.getenv("LEILA_PORT", "8100"))
-    debug = os.getenv("LEILA_DEBUG", "true").strip().lower() in {"1", "true", "yes", "on"}
+    debug = os.getenv("LEILA_DEBUG", "false").strip().lower() in {"1", "true", "yes", "on"}
 
     print("=" * 55)
     print("  LEILA Test Dashboard")
