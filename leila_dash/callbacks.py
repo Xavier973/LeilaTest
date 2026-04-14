@@ -15,6 +15,7 @@ import pages.marchandises as marchandises
 import pages.co2          as co2
 import pages.economie     as economie
 import pages.geo          as geo
+import pages.experimental as experimental
 
 SECTIONS = {
     "overview":     lambda d: overview.layout(d, df_form_missions, df_km_anomalies),
@@ -25,6 +26,7 @@ SECTIONS = {
     "co2":          co2.layout,
     "economie":     lambda d: economie.layout(d, df_carburant),
     "geo":          geo.layout,
+    "experimental": experimental.layout,
 }
 
 

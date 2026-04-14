@@ -50,4 +50,5 @@ NAV_ITEMS = [
     ("co2",          "06 — Impact CO₂"),
     ("economie",     "07 — Impact économique"),
     ("geo",          "08 — Géographie"),
+    ("experimental", "09 — Expérimental"),
 ]
